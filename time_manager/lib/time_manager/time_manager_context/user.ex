@@ -2,14 +2,9 @@ defmodule TimeManager.TimeManagerContext.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
   schema "users" do
     field :username, :string
     field :email, :string
-
-    has_many :working_times, TimeManager.TimeManagerContext.WorkingTime, foreign_key: :user
-    has_many :clocks, TimeManager.TimeManagerContext.Clock, foreign_key: :user
 
     timestamps()
   end
