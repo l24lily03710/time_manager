@@ -6,8 +6,6 @@ defmodule TimeManager.Repo.Migrations.CreateUsers do
       add :id, :binary_id, primary_key: true
       add :username, :string
       add :email, :string
-      add :time, :string
-      add :status, :boolean, default: false, null: false
 
       timestamps()
     end

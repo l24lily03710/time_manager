@@ -12,18 +12,13 @@ defmodule TimeManagerWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-  with {:ok, %User{} = user} <- TimeManagerContext.create_user(user_params) do
-    conn
-    |> put_status(:created)
-    |> put_resp_header("location", Routes.user_path(conn, :show, user))
-    |> render("show.json", user: user)
-  else
-    {:error, changeset} ->
+    with {:ok, %User{} = user} <- TimeManagerContext.create_user(user_params) do
       conn
-      |> put_status(:unprocessable_entity)
-      |> render("error.json", changeset: changeset)
+      |> put_status(:created)
+      |> put_resp_header("location", Routes.user_path(conn, :show, user))
+      |> render("show.json", user: user)
+    end
   end
-end
 
   def show(conn, %{"id" => id}) do
     user = TimeManagerContext.get_user!(id)

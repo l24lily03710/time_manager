@@ -6,9 +6,9 @@ defmodule TimeManager.TimeManagerContextTest do
   describe "users" do
     alias TimeManager.TimeManagerContext.User
 
-    @valid_attrs %{status: true, time: "some time", username: "some username", email: "some email"}
-    @update_attrs %{status: false, time: "some updated time", username: "some updated username", email: "some updated email"}
-    @invalid_attrs %{status: nil, time: nil, username: nil, email: nil}
+    @valid_attrs %{username: "some username", email: "some email"}
+    @update_attrs %{username: "some updated username", email: "some updated email"}
+    @invalid_attrs %{username: nil, email: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -31,8 +31,6 @@ defmodule TimeManager.TimeManagerContextTest do
 
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = TimeManagerContext.create_user(@valid_attrs)
-      assert user.status == true
-      assert user.time == "some time"
       assert user.username == "some username"
       assert user.email == "some email"
     end
@@ -44,8 +42,6 @@ defmodule TimeManager.TimeManagerContextTest do
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
       assert {:ok, %User{} = user} = TimeManagerContext.update_user(user, @update_attrs)
-      assert user.status == false
-      assert user.time == "some updated time"
       assert user.username == "some updated username"
       assert user.email == "some updated email"
     end

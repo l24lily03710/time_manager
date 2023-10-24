@@ -6,17 +6,13 @@ defmodule TimeManagerWeb.UserControllerTest do
 
   @create_attrs %{
     name: "some name",
-    address: "some address",
-    role: "some role",
     email: "some email"
   }
   @update_attrs %{
     name: "some updated name",
-    address: "some updated address",
-    role: "some updated role",
     email: "some updated email"
   }
-  @invalid_attrs %{name: nil, address: nil, role: nil, email: nil}
+  @invalid_attrs %{name: nil, email: nil}
 
   def fixture(:user) do
     {:ok, user} = TimeManagerContext.create_user(@create_attrs)
@@ -43,10 +39,8 @@ defmodule TimeManagerWeb.UserControllerTest do
 
       assert %{
                "id" => id,
-               "address" => "some address",
                "email" => "some email",
-               "name" => "some name",
-               "role" => "some role"
+               "name" => "some name"
              } = json_response(conn, 200)["data"]
     end
 
@@ -67,10 +61,8 @@ defmodule TimeManagerWeb.UserControllerTest do
 
       assert %{
                "id" => id,
-               "address" => "some updated address",
                "email" => "some updated email",
-               "name" => "some updated name",
-               "role" => "some updated role"
+               "name" => "some updated name"
              } = json_response(conn, 200)["data"]
     end
 

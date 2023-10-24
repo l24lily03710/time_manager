@@ -14,10 +14,10 @@ config :time_manager,
 # Configures the endpoint
 config :time_manager, TimeManagerWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "jMicb/m8eb9gFOay4OcYAbowlKtaD67VEu7YT0rD9nKHHzKnzJ4xRAHWaUPpOBVX",
+  secret_key_base: "e2M3SdxCy27vsD3gN6ppHaI7JISfjQNJcRZuFsoPHN9/gxngb6vIumu4sZIunaXu",
   render_errors: [view: TimeManagerWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: TimeManager.PubSub,
-  live_view: [signing_salt: "0KWjtLSA"]
+  live_view: [signing_salt: "SWNA36Bi"]
 
 # Configures Elixir's Logger
 config :logger, :console,
