@@ -7,7 +7,9 @@ defmodule TimeManager.TimeManagerContext.Clock do
   schema "clocks" do
     field :status, :boolean, default: false
     field :time, :naive_datetime
-    field :user, :binary_id
+    field :user, :binary_id, foreign_key: :user
+
+    #belongs_to :user, TimeManager.TimeManagerContext.User
 
     timestamps()
   end

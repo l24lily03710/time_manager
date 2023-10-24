@@ -12,11 +12,17 @@ defmodule TimeManagerWeb.WorkingTimeController do
   end
 
   def create(conn, %{"working_time" => working_time_params}) do
-    with {:ok, %WorkingTime{} = working_time} <- TimeManagerContext.create_working_time(working_time_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.working_time_path(conn, :show, working_time))
-      |> render("show.json", working_time: working_time)
+    case TimeManagerContext.create_working_time(working_time_params) do
+      {:ok, %WorkingTime{} = working_time} ->
+        conn
+        |> put_status(:created)
+        |> put_resp_header("location", Routes.working_time_path(conn, :show, working_time))
+        |> render("show.json", working_time: working_time)
+
+      {:error, changeset} ->
+        conn
+        |> put_status(422)  # Statut HTTP pour une validation incorrecte
+        |> json(%{errors: Ecto.Changeset.traverse_errors(changeset, :start)})
     end
   end
 

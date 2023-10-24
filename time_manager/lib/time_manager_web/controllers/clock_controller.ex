@@ -12,11 +12,17 @@ defmodule TimeManagerWeb.ClockController do
   end
 
   def create(conn, %{"clock" => clock_params}) do
-    with {:ok, %Clock{} = clock} <- TimeManagerContext.create_clock(clock_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.clock_path(conn, :show, clock))
-      |> render("show.json", clock: clock)
+    case TimeManagerContext.create_clock(clock_params) do
+      {:ok, %Clock{} = clock} ->
+        conn
+        |> put_status(:created)
+        |> put_resp_header("location", Routes.clock_path(conn, :show, clock))
+        |> render("show.json", clock: clock)
+
+      {:error, changeset} ->
+        conn
+        |> put_status(422)  # Statut HTTP pour une validation incorrecte
+        |> json(%{error: "La création de l'horloge a échoué."})
     end
   end
 
