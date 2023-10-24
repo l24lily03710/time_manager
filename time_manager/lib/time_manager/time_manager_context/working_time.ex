@@ -5,7 +5,8 @@ defmodule TimeManager.TimeManagerContext.WorkingTime do
   schema "workingtimes" do
     field :start, :naive_datetime
     field :end, :naive_datetime
-    field :user, :integer
+
+    belongs_to :user, TimeManager.TimeManagerContext.User
 
     timestamps()
   end
