@@ -19,7 +19,7 @@ defmodule TimeManager.TimeManagerContext.WorkingTime do
 
     case value do
       %NaiveDateTime{} -> changeset
-      _ -> add_datetime_error(changeset, field, "Invalid datetime format")
+      _ -> add_datetime_error(changeset, field, "Invalid datetime format, it should be YYYY - MM - DD HH : mm : ss")
     end
   end
 
