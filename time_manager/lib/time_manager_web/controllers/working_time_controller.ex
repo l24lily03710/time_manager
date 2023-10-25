@@ -6,6 +6,18 @@ defmodule TimeManagerWeb.WorkingTimeController do
 
   action_fallback TimeManagerWeb.FallbackController
 
+  def changeset_error_to_string(changeset) do
+    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+      Enum.reduce(opts, msg, fn {key, value}, acc ->
+        String.replace(acc, "%{#{key}}", to_string(value))
+      end)
+    end)
+    |> Enum.reduce("", fn {k, v}, acc ->
+      joined_errors = Enum.join(v, "; ")
+      "#{acc}#{k}: #{joined_errors}\n"
+    end)
+  end
+
   def index(conn, _params) do
     workingtimes = TimeManagerContext.list_workingtimes()
     render(conn, "index.json", workingtimes: workingtimes)
@@ -19,10 +31,10 @@ defmodule TimeManagerWeb.WorkingTimeController do
         |> put_resp_header("location", Routes.working_time_path(conn, :show, working_time))
         |> render("show.json", working_time: working_time)
 
-      {:error, _changeset} ->
+      {:error, changeset} ->
         conn
         |> put_status(422)  # Statut HTTP pour une validation incorrecte
-        |> json(%{error: "La création du working time a échoué."})
+        |> json(%{errors: changeset_error_to_string(changeset)})
     end
   end
 

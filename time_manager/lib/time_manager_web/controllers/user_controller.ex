@@ -6,6 +6,18 @@ defmodule TimeManagerWeb.UserController do
 
   action_fallback TimeManagerWeb.FallbackController
 
+  def changeset_error_to_string(changeset) do
+    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+      Enum.reduce(opts, msg, fn {key, value}, acc ->
+        String.replace(acc, "%{#{key}}", to_string(value))
+      end)
+    end)
+    |> Enum.reduce("", fn {k, v}, acc ->
+      joined_errors = Enum.join(v, "; ")
+      "#{acc}#{k}: #{joined_errors}\n"
+    end)
+  end
+
   def index(conn, _params) do
     users = TimeManagerContext.list_users()
     render(conn, "index.json", users: users)
@@ -19,10 +31,10 @@ defmodule TimeManagerWeb.UserController do
         |> put_resp_header("location", Routes.user_path(conn, :show, user))
         |> render("show.json", user: user)
 
-      {:error, _changeset} ->
+      {:error, changeset} ->
         conn
         |> put_status(422)  # Statut HTTP pour une validation incorrecte
-        |> json(%{error: "La création de l'user a échoué."})
+        |> json(%{errors: changeset_error_to_string(changeset)})
     end
   end
 

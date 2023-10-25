@@ -22,7 +22,7 @@ defmodule TimeManagerWeb.ClockController do
       {:error, _changeset} ->
         conn
         |> put_status(422)  # Statut HTTP pour une validation incorrecte
-        |> json(%{error: "La création de l'horloge a échoué."})
+        |> json(%{error: "La création de la clock a échoué."})
     end
   end
 
