@@ -19,7 +19,7 @@ defmodule TimeManagerWeb.ClockController do
         |> put_resp_header("location", Routes.clock_path(conn, :show, clock))
         |> render("show.json", clock: clock)
 
-      {:error, changeset} ->
+      {:error, _changeset} ->
         conn
         |> put_status(422)  # Statut HTTP pour une validation incorrecte
         |> json(%{error: "La création de l'horloge a échoué."})

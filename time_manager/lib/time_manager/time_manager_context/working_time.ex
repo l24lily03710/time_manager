@@ -3,12 +3,24 @@ defmodule TimeManager.TimeManagerContext.WorkingTime do
   import Ecto.Changeset
 
   schema "workingtimes" do
-    field :start, :naive_datetime
     field :end, :naive_datetime
-
+    field :start, :naive_datetime
     belongs_to :user, TimeManager.TimeManagerContext.User
 
     timestamps()
+  end
+
+  defp add_datetime_error(changeset, field, message) do
+    add_error(changeset, field, message)
+  end
+
+  def validate_datetime(changeset, field) do
+    value = get_field(changeset, field)
+
+    case value do
+      %NaiveDateTime{} -> changeset
+      _ -> add_datetime_error(changeset, field, "Invalid datetime format")
+    end
   end
 
   @doc false
@@ -16,7 +28,7 @@ defmodule TimeManager.TimeManagerContext.WorkingTime do
     working_time
     |> cast(attrs, [:start, :end])
     |> validate_required([:start, :end])
-    |> validate_format(:start, ~r/\A\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\z/, message: "Le format de début n'est pas valide (YYYY-MM-DD HH:MM:SS)")
-    |> validate_format(:end, ~r/\A\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\z/, message: "Le format de fin n'est pas valide (YYYY-MM-DD HH:MM:SS)")
+    |> validate_datetime(:start)
+    |> validate_datetime(:end)
   end
 end

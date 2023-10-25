@@ -23,11 +23,11 @@ defmodule TimeManagerWeb.Router do
     delete "/clocks/:id", ClockController, :delete
 
     # Routes for the "WorkingTime" controller
-    get "/working_times", WorkingTimeController, :index
-    get "/working_times/:id", WorkingTimeController, :show
-    post "/working_times", WorkingTimeController, :create
-    put "/working_times/:id", WorkingTimeController, :update
-    delete "/working_times/:id", WorkingTimeController, :delete
+    get "/workingtimes", WorkingTimeController, :index
+    get "/workingtimes/:id", WorkingTimeController, :show
+    post "/workingtimes", WorkingTimeController, :create
+    put "/workingtimes/:id", WorkingTimeController, :update
+    delete "/workingtimes/:id", WorkingTimeController, :delete
   end
 
   # Enables LiveDashboard only for development

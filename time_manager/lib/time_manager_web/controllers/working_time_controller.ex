@@ -19,10 +19,10 @@ defmodule TimeManagerWeb.WorkingTimeController do
         |> put_resp_header("location", Routes.working_time_path(conn, :show, working_time))
         |> render("show.json", working_time: working_time)
 
-      {:error, changeset} ->
+      {:error, _changeset} ->
         conn
         |> put_status(422)  # Statut HTTP pour une validation incorrecte
-        |> json(%{errors: Ecto.Changeset.traverse_errors(changeset, :start)})
+        |> json(%{error: "La création du working time a échoué."})
     end
   end
 

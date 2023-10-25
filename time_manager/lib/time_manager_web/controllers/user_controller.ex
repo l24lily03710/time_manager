@@ -19,10 +19,10 @@ defmodule TimeManagerWeb.UserController do
         |> put_resp_header("location", Routes.user_path(conn, :show, user))
         |> render("show.json", user: user)
 
-      {:error, changeset} ->
+      {:error, _changeset} ->
         conn
         |> put_status(422)  # Statut HTTP pour une validation incorrecte
-        |> json(%{errors: Ecto.Changeset.traverse_errors(changeset, :email)})
+        |> json(%{error: "La création de l'user a échoué."})
     end
   end
 
