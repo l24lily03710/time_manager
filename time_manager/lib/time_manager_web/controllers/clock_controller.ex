@@ -16,7 +16,7 @@ defmodule TimeManagerWeb.ClockController do
       {:ok, %Clock{} = clock} ->
         conn
         |> put_status(:created)
-        |> render("index.json", clock: clock)
+        |> render("construct.json", clock: clock, user_id: userID)
 
       {:error, _changeset} ->
         conn
@@ -25,7 +25,7 @@ defmodule TimeManagerWeb.ClockController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"userID" => id}) do
     clock = TimeManagerContext.get_clock!(id)
     render(conn, "show.json", clock: clock)
   end

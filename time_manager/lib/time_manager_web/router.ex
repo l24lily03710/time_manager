@@ -16,7 +16,7 @@ defmodule TimeManagerWeb.Router do
     delete "/users/:id", UserController, :delete
 
     # Routes for the "Clock" controller
-    get "/clocks/:userID", ClockController, :index
+    get "/clocks/:userID", ClockController, :show
     post "/clocks/:userID", ClockController, :create
 
     # Routes for the "WorkingTime" controller

@@ -6,7 +6,11 @@ defmodule TimeManagerWeb.ClockView do
     %{data: render_many(clocks, ClockView, "clock.json")}
   end
 
-  def render("show.json", %{clock: clock, user_id: user_id}) do
+  def render("show.json", %{clock: clock}) do
+    %{data: render_one(clock, ClockView, "clock.json")}
+  end
+
+  def render("construct.json", %{clock: clock, user_id: user_id}) do
     %{
       data: %{
         id: clock.id,
