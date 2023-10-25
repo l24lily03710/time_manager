@@ -18,6 +18,28 @@ defmodule TimeManagerWeb.UserController do
     end)
   end
 
+  def index(conn, %{"email" => email, "username" => username}) do
+    users = TimeManagerContext.list_users()
+    users_filtres = Enum.filter(users, fn user -> user.email == email end)
+    users_filtres_final = Enum.filter(users_filtres, fn user -> user.username == username end)
+
+    render(conn, "index.json", users: users_filtres_final)
+  end
+
+  def index(conn, %{"email" => email}) do
+    users = TimeManagerContext.list_users()
+    users_filtres = Enum.filter(users, fn user -> user.email == email end)
+
+    render(conn, "index.json", users: users_filtres)
+  end
+
+  def index(conn, %{"username" => username}) do
+    users = TimeManagerContext.list_users()
+    users_filtres = Enum.filter(users, fn user -> user.username == username end)
+
+    render(conn, "index.json", users: users_filtres)
+  end
+
   def index(conn, _params) do
     users = TimeManagerContext.list_users()
     render(conn, "index.json", users: users)
