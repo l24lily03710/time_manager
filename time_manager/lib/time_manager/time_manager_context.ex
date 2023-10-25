@@ -293,4 +293,9 @@ defmodule TimeManager.TimeManagerContext do
   def change_working_time(%WorkingTime{} = working_time, attrs \\ %{}) do
     WorkingTime.changeset(working_time, attrs)
   end
+
+  def find_clock(userID) do
+    query = from(c in Clock, where: c.user_id == ^userID, select: c)
+    Repo.all(query)
+  end
 end
