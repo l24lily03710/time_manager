@@ -227,7 +227,28 @@ defmodule TimeManager.TimeManagerContext do
       ** (Ecto.NoResultsError)
 
   """
-  def get_working_time!(id), do: Repo.get!(WorkingTime, id)
+    def filter_workingTime_by(user_id, start_date, end_date) do
+      from(wt in WorkingTime,
+        where: wt.user_id == ^user_id and wt.start >= ^start_date and wt.end <= ^end_date)
+      |> Repo.all()
+    end
+
+  def get_workingtime(id) when is_binary(id) do
+    id
+    |> String.to_integer()
+    |> get_workingtime()
+  end
+
+  def get_workingtime(id) when is_integer(id) do
+    Repo.get(WorkingTime, id)
+  end
+
+
+  def get_workingtime_by_user_and_id(user_id, workingtime_id) do
+    from(wt in WorkingTime,
+      where: wt.user_id == ^user_id and wt.id == ^workingtime_id)
+    |> Repo.one()
+  end
 
   @doc """
   Creates a working_time.
@@ -241,7 +262,7 @@ defmodule TimeManager.TimeManagerContext do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_working_time(attrs \\ %{}) do
+  def create_workingtime(attrs \\ %{}) do
     %WorkingTime{}
     |> WorkingTime.changeset(attrs)
     |> Repo.insert()

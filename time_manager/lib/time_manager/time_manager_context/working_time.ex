@@ -23,10 +23,18 @@ defmodule TimeManager.TimeManagerContext.WorkingTime do
     end
   end
 
+  @spec changeset(
+          {map(), map()}
+          | %{
+              :__struct__ => atom() | %{:__changeset__ => map(), optional(any()) => any()},
+              optional(atom()) => any()
+            },
+          :invalid | %{optional(:__struct__) => none(), optional(atom() | binary()) => any()}
+        ) :: Ecto.Changeset.t()
   @doc false
   def changeset(working_time, attrs) do
     working_time
-    |> cast(attrs, [:start, :end])
+    |> cast(attrs, [:start, :end, :user_id])
     |> validate_required([:start, :end])
     |> validate_datetime(:start)
     |> validate_datetime(:end)
