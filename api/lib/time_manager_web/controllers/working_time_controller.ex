@@ -24,7 +24,6 @@ defmodule TimeManagerWeb.WorkingTimeController do
     end
   end
 
-
   def show(conn, %{"userID" => user_id, "id" => id}) do
     working_time = TimeManagerContext.get_workingtime_by_user_and_id(user_id, id)
 
@@ -57,7 +56,7 @@ defmodule TimeManagerWeb.WorkingTimeController do
     end
   end
 
-  defp render_json(conn, working_times) do
+  def render_json(conn, working_times) do
     working_times_json = Enum.map(working_times, fn wt ->
       %{
         id: wt.id,

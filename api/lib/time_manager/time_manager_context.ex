@@ -227,11 +227,11 @@ defmodule TimeManager.TimeManagerContext do
       ** (Ecto.NoResultsError)
 
   """
-    def filter_workingTime_by(user_id, start_date, end_date) do
-      from(wt in WorkingTime,
-        where: wt.user_id == ^user_id and wt.start >= ^start_date and wt.end <= ^end_date)
-      |> Repo.all()
-    end
+  def filter_workingTime_by(user_id, start_date, end_date) do
+    from(wt in WorkingTime,
+      where: wt.user_id == ^user_id and wt.start >= ^start_date and wt.end <= ^end_date)
+    |> Repo.all()
+  end
 
   def get_workingtime(id) when is_binary(id) do
     id
