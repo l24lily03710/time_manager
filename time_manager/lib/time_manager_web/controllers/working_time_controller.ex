@@ -12,10 +12,15 @@ defmodule TimeManagerWeb.WorkingTimeController do
   end
 
   def create(conn, %{"userID" => userID, "workingtime" => workingtime_params}) do
-    with {:ok, %WorkingTime{} = working_time} <- TimeManagerContext.create_workingtime(Map.merge(%{"user_id" => userID}, workingtime_params)) do
-      conn
-      |> put_status(:created)
-      |> render("show.json", working_time: working_time)
+    case TimeManagerContext.create_workingtime(Map.merge(%{"user_id" => userID}, workingtime_params)) do
+      {:ok, %WorkingTime{} = working_time} ->
+        conn
+        |> put_status(:created)
+        |> render("show.json", working_time: working_time)
+      {:error, _changeset} ->
+        conn
+        |> put_status(422)  # Statut HTTP pour une validation incorrecte
+        |> json(%{error: "La création du working time a échoué."})
     end
   end
 
