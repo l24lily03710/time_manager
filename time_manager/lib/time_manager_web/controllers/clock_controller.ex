@@ -12,18 +12,18 @@ defmodule TimeManagerWeb.ClockController do
   end
 
   def create(conn, %{"clock" => clock_params, "userID" => userID}) do
-    case TimeManagerContext.create_clock(clock_params) do
+    case TimeManagerContext.create_clock(Map.put(clock_params, "user_id", userID)) do
       {:ok, %Clock{} = clock} ->
         conn
         |> put_status(:created)
         |> render("construct.json", clock: clock, user_id: userID)
-
       {:error, _changeset} ->
         conn
-        |> put_status(422)  # Statut HTTP pour une validation incorrecte
+        |> put_status(422)
         |> json(%{error: "La création de la clock a échoué."})
     end
   end
+
 
   def show(conn, %{"userID" => id}) do
     clock = TimeManagerContext.get_clock!(id)

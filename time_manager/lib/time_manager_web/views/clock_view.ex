@@ -22,8 +22,12 @@ defmodule TimeManagerWeb.ClockView do
   end
 
   def render("clock.json", %{clock: clock}) do
-    %{id: clock.id,
-      time: clock.time,
-      status: clock.status}
+    %{
+      data: %{
+        id: clock.id,
+        time: clock.time,
+        status: clock.status,
+      }
+    }
   end
 end
