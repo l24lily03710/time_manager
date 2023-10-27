@@ -5,8 +5,8 @@ config :time_manager, TimeManager.Repo,
   username: "postgres",
   password: "postgres",
   database: "time_manager_dev",
-  hostname: "localhost",
-  port: "5500",
+  hostname: "db",
+  port: "5432",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
