@@ -35,10 +35,10 @@ docker-compose build
 docker-compose up
 ```
 
-5. L'api est disponible à cette adresse :
+5. L'api est disponible à cette adresse avec un reverse proxy nginx :
 
 ```shell
-http://localhost:4000
+http://localhost:8000
 ```
 
 ## Lancement du front-end
@@ -68,7 +68,7 @@ docker build -t vuejs/time_manager_front .
 docker run -it -p 8080:8080 --rm --name time_manager_front_1 vuejs/time_manager_front
 ```
 
-5. L'api est disponible à cette adresse :
+5. Le front est disponible à cette adresse :
 
 ```shell
 http://127.0.0.1:8080/
