@@ -14,3 +14,4 @@ Time Manager est une application Elixir/Phoenix pour gérer les horaires de trav
 
 ```shell
 git clone https://github.com/votre-utilisateur/time-manager.git
+```
