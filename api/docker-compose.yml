@@ -33,6 +33,8 @@ services:
          - '8000:8000'  # Port du reverse proxy Nginx.
       networks:
          - postgres-network
+      depends_on:
+        - phoenix
    db:
       image: postgres
       container_name: phoenix-postgres

@@ -4,10 +4,6 @@
 # Wait until Postgres is ready.
 while ! pg_isready -q -h $PGHOST -p $PGPORT -U $PGUSER
 do
-  echo $PGHOST
-  echo $PGPORT
-  echo $PGUSER
-  echo $PGDATABASE
   echo "$(date) - waiting for database to start"
   sleep 2
 done
