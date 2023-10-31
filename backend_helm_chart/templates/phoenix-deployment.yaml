@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-phoenix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+        - name: phoenix
+          image: phoenix-backend:0.1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4000
+          env:
+            - name: PGUSER
+              value: "{{ .Values.phoenix.environment.PGUSER }}"
+            - name: PGPASSWORD
+              value: "{{ .Values.phoenix.environment.PGPASSWORD }}"
+            - name: PGDATABASE
+              value: "{{ .Values.phoenix.environment.PGDATABASE }}"
+            - name: PGPORT
+              value: "{{ .Values.phoenix.environment.PGPORT }}"
+            - name: PGHOST
+              value: "{{ .Values.phoenix.environment.PGHOST }}"
