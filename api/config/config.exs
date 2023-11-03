@@ -14,10 +14,10 @@ config :time_manager,
 # Configures the endpoint
 config :time_manager, TimeManagerWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "e2M3SdxCy27vsD3gN6ppHaI7JISfjQNJcRZuFsoPHN9/gxngb6vIumu4sZIunaXu",
+  secret_key_base: "ibRCIm3Vo2g1sOXk3wYfuKaRHdAx/H5KYdgzc7P955jQrGZDOXAENY2Ce4m6N4oG",
   render_errors: [view: TimeManagerWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: TimeManager.PubSub,
-  live_view: [signing_salt: "SWNA36Bi"]
+  live_view: [signing_salt: "jhRT3NlY"]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -28,7 +28,7 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 # config cors thing
-config :myapp, MyAppWeb.Endpoint,
+config :time_manager, MyAppWeb.Endpoint,
   http: [port: 4000],
   cors: [
     origins: "*",
@@ -37,6 +37,9 @@ config :myapp, MyAppWeb.Endpoint,
     max_age: 0
   ]
 
+config :time_manager, TimeManager.Guardian,
+  issuer: "time_manager",
+  secret_key: "yHAwBrlhtX4ODoD7/KBgHKcYa8cRlqtxcfmt/Uf+6PeqECxjRbT8dCKpTvGvajuN"
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

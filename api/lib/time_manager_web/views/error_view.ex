@@ -13,4 +13,12 @@ defmodule TimeManagerWeb.ErrorView do
   def template_not_found(template, _assigns) do
     %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
   end
+
+  def render("404.json", %{reason: reason}) do
+    %{errors: %{detail: reason}}
+  end
+
+  def render("401.json", %{reason: reason}) do
+    %{errors: %{detail: reason}}
+  end
 end

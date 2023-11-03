@@ -6,8 +6,24 @@ defmodule TimeManagerWeb.Router do
     plug CORSPlug
   end
 
-  scope "/api", TimeManagerWeb do
+  pipeline :authenticated do
+    plug :accepts, ["json"]
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer", module: TimeManager.Guardian, error_handler: TimeManager.GuardianErrorHandler
+    plug Guardian.Plug.LoadResource, module: TimeManager.Guardian,
+    error_handler: TimeManager.GuardianErrorHandler
+    plug TimeManager.FetchCurrentUser
+  end
+
+  scope "/", TimeManagerWeb do
     pipe_through :api
+
+    post "/register", AuthController, :register
+    post "/login", AuthController, :login
+  end
+
+
+  scope "/api", TimeManagerWeb do
+    pipe_through :authenticated
 
     # Routes for the "User" controller
     get "/users", UserController, :index

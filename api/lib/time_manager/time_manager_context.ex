@@ -37,6 +37,22 @@ defmodule TimeManager.TimeManagerContext do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user(id) when is_binary(id) do
+    Repo.get!(User, id)
+  end
+
+  def authenticate(email, password) do
+    case Repo.get_by(User, email: email) do
+      nil -> {:error, "User not found"}
+      user ->
+        if Bcrypt.verify_pass(password, user.password) do
+          {:ok, user}
+        else
+          {:error, "Invalid password"}
+        end
+    end
+  end
+
   @doc """
   Creates a user.
 
@@ -52,7 +68,12 @@ defmodule TimeManager.TimeManagerContext do
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
+    |> Ecto.Changeset.update_change(:password, &hash_password/1)
     |> Repo.insert()
+  end
+
+  defp hash_password(password) do
+    Bcrypt.hash_pwd_salt(password)
   end
 
   @doc """
