@@ -66,15 +66,28 @@ defmodule TimeManager.TimeManagerContext do
 
   """
   def create_user(attrs \\ %{}) do
-    %User{}
+    # Compte le nombre d'utilisateurs dans la base de données
+    user_count = Repo.aggregate(User, :count, :id)
+
+    # Détermine le rôle en fonction du nombre d'utilisateurs
+    role = if user_count == 0 do
+             2  # Premier utilisateur, attribuer le rôle d'administrateur
+           else
+             0  # Les utilisateurs suivants auront un rôle différent (par exemple, 1 pour utilisateur standard)
+           end
+
+    user = %User{role: role}
     |> User.changeset(attrs)
     |> Ecto.Changeset.update_change(:password, &hash_password/1)
     |> Repo.insert()
+
+    user
   end
 
   defp hash_password(password) do
     Bcrypt.hash_pwd_salt(password)
   end
+
 
   @doc """
   Updates a user.
@@ -153,6 +166,9 @@ defmodule TimeManager.TimeManagerContext do
 
   """
   def get_clock!(id), do: Repo.get!(Clock, id)
+  def get_clock(id) when is_binary(id) do
+    Repo.get(Clock, id)
+  end
 
   @doc """
   Creates a clock.
@@ -340,4 +356,98 @@ defmodule TimeManager.TimeManagerContext do
     query = from(c in Clock, where: c.user_id == ^userID, select: c)
     Repo.all(query)
   end
+
+  alias TimeManager.TimeManagerContext.Team
+
+  def list_user_teams(user_id) when is_binary(user_id) do
+    user = get_user(user_id)
+
+    user
+    |> Ecto.assoc(:teams)
+    |> Repo.all()
+  end
+
+  def list_teams do
+    from(t in Team, select: t)
+    |> Repo.all()
+  end
+
+  def get_team(team_id) when is_binary(team_id) do
+    Repo.get(Team, team_id)
+  end
+
+  def add_user_to_team(user_id, team_id) do
+    case {Repo.get(User, user_id), Repo.get(Team, team_id)} do
+      {nil, _} ->
+        {:error, "L'utilisateur avec l'ID #{user_id} n'existe pas."}
+
+      {_, nil} ->
+        {:error, "L'équipe avec l'ID #{team_id} n'existe pas."}
+
+      {user, team} ->
+        case Ecto.Changeset.change(user)
+        |> Ecto.Changeset.put_assoc(:teams, [team])
+        |> Repo.update() do
+          {:ok, updated_user} ->
+            {:ok, updated_user}
+
+          {:error, changeset_errors} ->
+            {:error, changeset_errors}
+        end
+    end
+  end
+
+
+  def clear_user_team(user_id) do
+    case Repo.get(User, user_id) do
+      nil ->
+        {:error, "L'utilisateur avec l'ID #{user_id} n'existe pas."}
+
+      user ->
+        case Ecto.Changeset.change(user)
+        |> Ecto.Changeset.put_assoc(:teams, [])
+        |> Repo.update() do
+          {:ok, updated_user} ->
+            {:ok, updated_user}
+
+          {:error, changeset_errors} ->
+            {:error, changeset_errors}
+        end
+    end
+  end
+
+
+  def create_team(attrs) do
+    %Team{}
+    |> Team.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def set_user_role(user_id, new_role) do
+    user = Repo.get(User, user_id)
+    case user do
+      %User{} = user ->
+        user
+        |> Ecto.Changeset.change(role: new_role)
+        |> Repo.update()
+        |> case do
+          {:ok, user} -> {:ok, user}
+          {:error, changeset} -> {:error, changeset.errors}
+        end
+      _ ->
+        {:error, "Utilisateur introuvable"}
+    end
+  end
+
+  def delete_team(teamID) do
+  case TimeManager.TimeManagerContext.get_team(teamID) do
+    %Team{} = team ->
+      case Repo.delete(team) do
+        {:ok, _} -> {:ok, "Équipe supprimée avec succès."}
+        _ -> {:error, "Impossible de supprimer l'équipe."}
+      end
+    nil -> {:error, "L'équipe n'existe pas."}
+  end
+end
+
 end

@@ -6,8 +6,9 @@ defmodule TimeManager.Repo.Migrations.CreateUsers do
       add :username, :string
       add :email, :string
       add :password, :string
+      add :role, :integer
 
-      timestamps()
+      timestamps(type: :utc_datetime)
     end
     create unique_index(:users, [:email])
   end

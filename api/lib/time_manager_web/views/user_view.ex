@@ -12,7 +12,12 @@ defmodule TimeManagerWeb.UserView do
 
   def render("user.json", %{user: user}) do
     %{id: user.id,
+      role: user.role,
       username: user.username,
       email: user.email}
+  end
+
+  def render("error.json", %{message: message}) do
+    %{error: %{message: message}}
   end
 end

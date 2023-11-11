@@ -28,10 +28,10 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 # config cors thing
-config :time_manager, MyAppWeb.Endpoint,
+config :time_manager, TimeManagerWeb.Endpoint,
   http: [port: 4000],
   cors: [
-    origins: "*",
+    origins: "http://localhost:8080",
     methods: "GET, POST, PUT, DELETE, OPTIONS",
     headers: "authorization, content-type, accept",
     max_age: 0

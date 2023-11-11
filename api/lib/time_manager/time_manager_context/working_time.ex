@@ -3,11 +3,11 @@ defmodule TimeManager.TimeManagerContext.WorkingTime do
   import Ecto.Changeset
 
   schema "workingtimes" do
-    field :end, :naive_datetime
-    field :start, :naive_datetime
+    field :end, :utc_datetime
+    field :start, :utc_datetime
     belongs_to :user, TimeManager.TimeManagerContext.User
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   defp add_datetime_error(changeset, field, message) do
@@ -23,14 +23,6 @@ defmodule TimeManager.TimeManagerContext.WorkingTime do
     end
   end
 
-  @spec changeset(
-          {map(), map()}
-          | %{
-              :__struct__ => atom() | %{:__changeset__ => map(), optional(any()) => any()},
-              optional(atom()) => any()
-            },
-          :invalid | %{optional(:__struct__) => none(), optional(atom() | binary()) => any()}
-        ) :: Ecto.Changeset.t()
   @doc false
   def changeset(working_time, attrs) do
     working_time

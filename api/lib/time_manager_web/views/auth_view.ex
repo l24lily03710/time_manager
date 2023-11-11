@@ -5,8 +5,8 @@ defmodule TimeManagerWeb.AuthView do
     %{data: %{user: render_user(user), token: token}}
   end
 
-  defp render_user(%TimeManager.TimeManagerContext.User{email: email, username: username}) do
-    %{email: email, username: username}
+  defp render_user(%TimeManager.TimeManagerContext.User{email: email, username: username, id: id}) do
+    %{email: email, username: username, id: id}
   end
 
   defp render_user_with_password(%TimeManager.TimeManagerContext.User{email: email, username: username, password: password}) do

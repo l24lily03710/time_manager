@@ -4,13 +4,20 @@ defmodule TimeManager.TimeManagerContext.Clock do
 
   schema "clocks" do
     field :status, :boolean, default: false
-    field :time, :naive_datetime
-
+    field :time, :utc_datetime
     belongs_to :user, TimeManager.TimeManagerContext.User
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
+  @spec changeset(
+          {map(), map()}
+          | %{
+              :__struct__ => atom() | %{:__changeset__ => map(), optional(any()) => any()},
+              optional(atom()) => any()
+            },
+          :invalid | %{optional(:__struct__) => none(), optional(atom() | binary()) => any()}
+        ) :: Ecto.Changeset.t()
   @doc false
   def changeset(clock, attrs) do
     clock

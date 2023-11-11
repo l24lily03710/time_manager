@@ -8,6 +8,9 @@ do
   sleep 2
 done
 
+mix deps.get
+mix ecto.reset
+mix ecto.create
 mix ecto.migrate
 #mix run priv/repo/seeds.exs
 echo "Database $PGDATABASE migrated."

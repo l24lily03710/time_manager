@@ -29,6 +29,7 @@ defmodule TimeManagerWeb.Router do
     get "/users", UserController, :index
     get "/users/:id", UserController, :show
     post "/users", UserController, :create
+    put "/user_role", UserController, :update_role
     put "/users/:id", UserController, :update
     delete "/users/:id", UserController, :delete
 
@@ -37,11 +38,19 @@ defmodule TimeManagerWeb.Router do
     post "/clocks/:userID", ClockController, :create
 
     # Routes for the "WorkingTime" controller
-    get "/workingtimes/:userID", WorkingTimeController, :index
+    get "/workingtimes/:m", WorkingTimeController, :index
     get "/workingtimes/:userID/:id", WorkingTimeController, :show
     post "/workingtimes/:userID", WorkingTimeController, :create
     put "/workingtimes/:id", WorkingTimeController, :update
     delete "/workingtimes/:id", WorkingTimeController, :delete
+
+    # Routes for the "Team" controller
+    get "/user/team/:userID", TeamController, :index
+    get "/team/:teamID", TeamController, :show
+    post "/team/add_user", TeamController, :add_user
+    put "/team/clear_user_team/:user_id", TeamController, :clear_user_team
+    post "/team", TeamController, :create
+    delete "/team/:teamID", TeamController, :delete
   end
 
   # Enables LiveDashboard only for development

@@ -1,14 +1,11 @@
 defmodule TimeManagerWeb.AuthController do
   use TimeManagerWeb, :controller
   alias TimeManager.TimeManagerContext
-  alias TimeManager.TimeManagerContext.User
   alias TimeManager.Guardian
 
   def register(conn, %{"user" => user_params}) do
     case TimeManagerContext.create_user(user_params) do
-
       {:ok, user} ->
-        IO.inspect user_params
         {:ok, token, _claims} = Guardian.encode_and_sign(user)
         conn
         |> put_status(:created)

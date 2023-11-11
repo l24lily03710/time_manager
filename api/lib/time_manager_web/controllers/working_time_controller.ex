@@ -7,12 +7,20 @@ defmodule TimeManagerWeb.WorkingTimeController do
   action_fallback TimeManagerWeb.FallbackController
 
   def index(conn, %{"userID" => user_id, "start" => start, "end" => the_end}) do
-    working_times = TimeManagerContext.filter_workingTime_by(user_id, start, the_end)
-    render_json(conn, working_times)
+    case TimeManagerContext.filter_workingTime_by(user_id, start, the_end) do
+      {:ok, working_times} ->
+        render_json(conn, working_times)
+
+      {:error, reason} ->
+        conn
+        |> put_status(:internal_server_error)
+        |> render("error.json", message: reason)
+    end
   end
 
+
   def create(conn, %{"userID" => userID, "workingtime" => workingtime_params}) do
-    case TimeManagerContext.create_workingtime(Map.merge(%{"user_id" => userID}, workingtime_params)) do
+    case TimeManagerContext.create_workingtime(Map.merge(%{"user" => userID}, workingtime_params)) do
       {:ok, %WorkingTime{} = working_time} ->
         conn
         |> put_status(:created)
@@ -51,10 +59,17 @@ defmodule TimeManagerWeb.WorkingTimeController do
   def delete(conn, %{"id" => id}) do
     working_time = TimeManagerContext.get_workingtime(id)
 
-    with {:ok, %WorkingTime{}} <- TimeManagerContext.delete_working_time(working_time) do
-      send_resp(conn, :no_content, "")
+    case TimeManagerContext.delete_working_time(working_time) do
+      {:ok, _} ->
+        send_resp(conn, :no_content, "")
+
+      {:error, reason} ->
+        conn
+        |> put_status(:internal_server_error)
+        |> render("error.json", message: reason)
     end
   end
+
 
   def render_json(conn, working_times) do
     working_times_json = Enum.map(working_times, fn wt ->
